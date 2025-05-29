@@ -1,3 +1,7 @@
+import axios from "axios"
+import phoneService from '../services/phonebook'
+
+
 const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNewNumber }) => {
 
     const addPerson = (event) => {
@@ -8,7 +12,16 @@ const PersonForm = ({ persons, setPersons, newName, setNewName, newNumber, setNe
             return
         }
 
-        setPersons(persons.concat({ name: newName, number: newNumber }))
+        if (newName === '' || newNumber === '') {
+            alert('Name and number must not be empty')
+            return
+        }
+
+        phoneService.create({ name: newName, number: newNumber })
+            .then(response => {
+                console.log('response:', response)
+                setPersons(persons.concat(response))
+            })
         setNewName('')
         setNewNumber('')
     }
